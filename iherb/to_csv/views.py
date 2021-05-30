@@ -32,8 +32,6 @@ class CrawlingView(View):
             page_list = soup.find_all('div', {'class': 'pagination'})
             max_page = page_list[0].find_all('span')[-2].text
 
-            # pagination 하여 크롤링 필요
-
             product_list = soup.find_all(
                 'div', {'class': 'product-inner product-inner-wide'}
             )
@@ -53,13 +51,6 @@ class CrawlingView(View):
                     (product_id, img_src, name, rating, reviews, price, link))
 
             csv_open.close()
-
-            # 왜 안되었던 것인지 연구 필
-            # for product in product_list:
-            #     a = product.find_all('a', re.compile('data-ga-product-id'))
-            #     print(a)
-            #     # a2 = a.get('data-ga-product-id')
-            #     # print(a2)
 
             return JsonResponse({'message': 'Crawling done'}, status=200)
 
