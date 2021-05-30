@@ -95,7 +95,6 @@ class CrawlingView(View):
             max_page = int(page_list[0].find_all('span')[-2].text)
 
             for page in range(1, max_page+1):
-                print(page)
                 pagination_url = 'https://kr.iherb.com/c/Bath-Personal-Care?p=' + \
                     str(page)
 
@@ -116,7 +115,6 @@ class CrawlingView(View):
                         'href') != None else ''
                     name = a_tag[0].get(
                         'aria-label') if a_tag[0].get('aria-label') != None else ''
-                    print(name)
 
                     if len(a_tag) >= 2:
                         rating = a_tag[2].get('title').split(' - ')[0]
