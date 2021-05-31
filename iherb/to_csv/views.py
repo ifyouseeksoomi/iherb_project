@@ -48,6 +48,7 @@ class OneCrawlingView(View):
                 else:
                     rating = ''
                     reviews = ''
+
                 price = a_tag[0].get(
                     'data-ga-discount-price') if a_tag[0].get('data-ga-discount-price') != None else ''
                 link = a_tag[0].get('href') if a_tag[0].get(
