@@ -4,6 +4,14 @@ import csv
 
 from django.views import View
 from django.http import JsonResponse
+from django.core.paginator import (
+    Paginator,
+    EmptyPage
+)
+
+from to_csv.models import (
+    BathPersonalProduct
+)
 
 
 class OneCrawlingView(View):
@@ -35,11 +43,12 @@ class OneCrawlingView(View):
 
                 product_id = a_tag[0].get(
                     'data-ga-product-id') if a_tag[0].get('data-ga-product-id') != None else ''
+
                 img_src = a_tag[0].get('href') if a_tag[0].get(
                     'href') != None else ''
+
                 name = a_tag[0].get(
                     'aria-label') if a_tag[0].get('aria-label') != None else ''
-                print(name)
 
                 if len(a_tag) >= 2:
                     rating = a_tag[2].get('title').split(' - ')[0]
@@ -51,6 +60,7 @@ class OneCrawlingView(View):
 
                 price = a_tag[0].get(
                     'data-ga-discount-price') if a_tag[0].get('data-ga-discount-price') != None else ''
+
                 link = a_tag[0].get('href') if a_tag[0].get(
                     'href') != None else ''
 
@@ -145,3 +155,41 @@ class CrawlingView(View):
 
         except ValueError as value_e:
             return JsonResponse({'ValueError': str(value_e)}, status=400)
+
+
+class BathPersonalProductListView(View):
+    def get(self, request):
+        try:
+            page = request.GET.get('page')
+            products_list = BathPersonalProduct.objects.all()
+
+            p = Paginator(products_list, 24)
+            p_products = p.page(page)
+
+            result = list({
+                'key_number': product.key_number,
+                'img_src': product.img_src,
+                'name': product.name,
+                'rating': product.rating,
+                'reviews': product.reviews,
+                'price': product.price,
+                'link': product.link
+            } for product in p_products)
+
+            return JsonResponse({
+                'pages': p.num_pages,
+                'items': p.count,
+                'products_list_per_page': result
+            }, status=200)
+
+        except TypeError as type_e:
+            return JsonResponse({'TypeError': str(type_e)}, status=400)
+
+        except KeyError as key_e:
+            return JsonResponse({'KeyError': key_e}, status=400)
+
+        except ValueError as value_e:
+            return JsonResponse({'ValueError': str(value_e)}, status=400)
+
+        except EmptyPage as page_e:
+            return JsonResponse({'EmptyPage': str(page_e)}, status=400)
