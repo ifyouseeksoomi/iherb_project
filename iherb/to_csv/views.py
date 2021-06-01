@@ -30,7 +30,7 @@ class OneCrawlingView(View):
                 'link'         # 링크 url
             ))
 
-            url = 'https://kr.iherb.com/c/Bath-Personal-Care?p=83'
+            url = 'https://kr.iherb.com/c/Bath-Personal-Care?p=81'
             response = requests.get(url)
             source = response.text
             soup = BeautifulSoup(source, 'html.parser')
@@ -40,12 +40,13 @@ class OneCrawlingView(View):
 
             for page in page_content:
                 a_tag = page.find_all('a')
+                img_tag = page.find_all('button')
 
                 product_id = a_tag[0].get(
                     'data-ga-product-id') if a_tag[0].get('data-ga-product-id') != None else ''
 
-                img_src = a_tag[0].get('href') if a_tag[0].get(
-                    'href') != None else ''
+                img_src = img_tag[0].get(
+                    'data-cart-info').split('"iURLMedium":"')[1].split('","listPrice"')[0]
 
                 name = a_tag[0].get(
                     'aria-label') if a_tag[0].get('aria-label') != None else ''
@@ -119,11 +120,20 @@ class CrawlingView(View):
 
                 for product in product_list:
                     a_tag = product.find_all('a')
+                    img_tag = product.find_all('img')
 
                     product_id = a_tag[0].get(
                         'data-ga-product-id') if a_tag[0].get('data-ga-product-id') != None else ''
-                    img_src = a_tag[0].get('href') if a_tag[0].get(
-                        'href') != None else ''
+
+                    img_src = img_tag[0].get(
+                        'src') if len(img_tag) != 0 else ''
+
+                    # if len(img_tag) != 0:
+                    #     img_src = img_tag[0].get(
+                    #         'data-cart-info').split('"iURLMedium":"')[1].split('","listPrice"')[0]
+                    # else:
+                    #     img_src = ''
+
                     name = a_tag[0].get(
                         'aria-label') if a_tag[0].get('aria-label') != None else ''
 
@@ -137,6 +147,7 @@ class CrawlingView(View):
 
                     price = a_tag[0].get(
                         'data-ga-discount-price') if a_tag[0].get('data-ga-discount-price') != None else ''
+
                     link = a_tag[0].get('href') if a_tag[0].get(
                         'href') != None else ''
 
