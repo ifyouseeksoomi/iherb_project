@@ -22,8 +22,14 @@
 - AWS EC2, RDS
 - gunicorn
 
-## Clone Manual
+<br> 
+
+## Clone & runserver Manual
 1. 해당 프로젝트를 클론 받을 디렉토리 생성 (ex. iherb_hwangsoomi)
 2. 디렉토리 내에서 `git init` 
 3. 디렉토리 내에서 `git clone https://github.com/ifyouseeksoomi/iherb_project.git` (주소는 아래 사진을 참조)
 ![image](https://user-images.githubusercontent.com/59601700/120460416-118f0200-c3d4-11eb-9767-27a2d039add0.png)
+4. 이후 디렉토리(1번에서 만든) 내 프로젝트 clone 완료 (프로젝트 명 : iherb)
+5. '1번에서 만든 디렉토리'/iherb(터미널에서 ls 명령 시, `manage.py`가 보이는 뎁스)에서 `python manage.py runserver` 시 서버 on
+6. 서버 실행 시, `localhost:8000/'url'`로 각각의 API 호출 및 확인 가능
+
